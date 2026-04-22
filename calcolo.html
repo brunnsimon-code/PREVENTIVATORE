@@ -3,162 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fotografia Confronto Mese</title>
+    <title>Analisi Convenienza Energetica</title>
     <style>
-        :root { --emerald: #40b093; --dark-emerald: #2a8a72; --dark: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--dark); padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(64, 176, 147, 0.1); max-width: 450px; width: 100%; }
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { font-size: 20px; color: var(--dark-emerald); margin: 0; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-        label { display: block; font-size: 13px; font-weight: 700; margin-top: 15px; margin-bottom: 5px; color: var(--dark); }
-        select, input { width: 100%; padding: 14px; border: 2px solid #e0e6ed; border-radius: 12px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
-        select:focus, input:focus { border-color: var(--emerald); outline: none; }
-        .toggle-group { display: flex; gap: 10px; margin-top: 5px; }
-        .toggle-btn { flex: 1; padding: 12px; border: 2px solid #e0e6ed; background: white; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.3s; }
-        .toggle-btn.active { background: var(--emerald); color: white; border-color: var(--emerald); }
-        .bimestrale-fields { display: none; margin-top: 10px; padding: 15px; background: #f9fbfb; border-radius: 12px; border: 1px solid #e0e6ed; }
-        button#calc-btn { width: 100%; padding: 18px; background: var(--emerald); color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; margin-top: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(64, 176, 147, 0.3); }
-        button#calc-btn:active { transform: translateY(2px); }
-        .result-card { margin-top: 25px; padding: 20px; background: #f0fff4; border-radius: 15px; border: 2px solid #c6f6d5; text-align: center; }
-        .result-val { font-size: 36px; font-weight: 800; color: var(--dark-emerald); }
-        .pun-info { font-size: 12px; color: #666; margin-top: 5px; font-style: italic; }
+        :root { --emerald: #40b093; --dark: #2a8a72; --red: #e74c3c; --bg: #f4f7f6; }
+        body { font-family: sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 420px; box-sizing: border-box; }
+        h1 { color: var(--dark); text-align: center; text-transform: uppercase; font-size: 18px; margin-bottom: 20px; font-weight: 800; }
+        .section { background: var(--emerald); color: white; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; margin: 15px 0; font-size: 13px; text-transform: uppercase; }
+        .section.old { background: var(--red); }
+        label { display: block; font-size: 11px; font-weight: bold; margin: 12px 0 5px; color: #444; line-height: 1.2; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 10px; box-sizing: border-box; font-size: 15px; background: #fff; }
+        .btn-group { display: flex; gap: 8px; }
+        .btn { flex: 1; padding: 12px; border: 2px solid #e0e6ed; background: white; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: bold; color: #666; }
+        .btn.active { background: var(--emerald); color: white; border-color: var(--emerald); }
+        .anter-box { background: #f0fff4; border: 1px dashed var(--dark); padding: 10px; border-radius: 10px; color: var(--dark); font-size: 11px; text-align: center; font-weight: bold; margin: 15px 0; }
+        .calc-btn { width: 100%; padding: 18px; background: var(--dark); color: white; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        .results { display: flex; gap: 10px; margin-top: 20px; }
+        .res-box { flex: 1; padding: 15px; border-radius: 15px; border: 2px solid #e0e6ed; text-align: center; background: #fff; }
+        .res-box.highlight { border-color: var(--emerald); background: #f0fff4; }
+        .res-label { font-size: 9px; font-weight: bold; color: #888; display: block; margin-bottom: 5px; }
+        .res-val { font-size: 18px; font-weight: 800; color: var(--dark); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>FOTOGRAFIA PER CONFRONTO SUL MESE</h1>
+<div class="card">
+    <h1>Analisi Convenienza</h1>
+
+    <div class="section">Nostra Offerta</div>
+    
+    <label>Tipo Bolletta</label>
+    <div class="btn-group">
+        <button id="m-btn" class="btn active" onclick="setTipo(true)">Mensile</button>
+        <button id="b-btn" class="btn" onclick="setTipo(false)">Bimestrale</button>
     </div>
 
-    <label>Tipo di Bolletta Attuale</label>
-    <div class="toggle-group">
-        <button class="toggle-btn active" id="type1" onclick="setType(1)">Mensile</button>
-        <button class="toggle-btn" id="type2" onclick="setType(2)">Bimestrale</button>
+    <label>Fase Contrattuale</label>
+    <div class="btn-group">
+        <button id="p1-btn" class="btn active" onclick="setFase(true)">Primi 3 Mesi</button>
+        <button id="p2-btn" class="btn" onclick="setFase(false)">Dal 4° Mese</button>
     </div>
 
-    <label>Fase Contrattuale Cliente</label>
-    <div class="toggle-group">
-        <button class="toggle-btn active" id="period1" onclick="setPeriod(1)">Primi 3 Mesi</button>
-        <button class="toggle-btn" id="period2" onclick="setPeriod(2)">Dal 4° Mese</button>
-    </div>
-
-    <div id="sectionMensile">
-        <label>Mese di Riferimento (Dati GME)</label>
-        <select id="punMese1">
-            <option value="0.14340">Marzo 2026 (PUN: 0,14340)</option>
-            <option value="0.11441">Febbraio 2026 (PUN: 0,11441)</option>
-            <option value="0.13266">Gennaio 2026 (PUN: 0,13266)</option>
+    <div id="area-m">
+        <label>PUN di riferimento</label>
+        <select id="pun-m">
+            <option value="0.13266">Gennaio '26 (0,13266)</option>
+            <option value="0.11441">Febbraio '26 (0,11441)</option>
+            <option value="0.14340">Marzo '26 (0,14340)</option>
         </select>
-        <label>Consumo kWh Totale Mensile</label>
-        <input type="number" id="kwhMese1" placeholder="Es. 300">
+        <label>Consumo kWh del Mese</label>
+        <input type="number" id="kwh-m" placeholder="es. 300">
     </div>
 
-    <div id="sectionBimestrale" class="bimestrale-fields">
-        <label>Seleziona i due mesi della bolletta</label>
-        <div style="display: flex; gap: 10px;">
-            <select id="punBimes1">
-                <option value="0.14340">Marzo '26</option>
-                <option value="0.11441">Febbraio '26</option>
-                <option value="0.13266">Gennaio '26</option>
-            </select>
-            <select id="punBimes2">
-                <option value="0.11441">Febbraio '26</option>
-                <option value="0.14340">Marzo '26</option>
-                <option value="0.13266">Gennaio '26</option>
-            </select>
+    <div id="area-b" style="display:none;">
+        <label>PUN Mesi</label>
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
+            <select id="pb1"><option value="0.13266">Gen '26</option></select>
+            <select id="pb2"><option value="0.11441" selected>Feb '26</option></select>
         </div>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <div style="flex: 1;">
-                <label style="margin-top:0">CONSUMO MESE 1 (kWh)</label>
-                <input type="number" id="kwhBimes1" placeholder="Es. 250">
-            </div>
-            <div style="flex: 1;">
-                <label style="margin-top:0">CONSUMO MESE 2 (kWh)</label>
-                <input type="number" id="kwhBimes2" placeholder="Es. 350">
-            </div>
+        <div style="display:flex; gap:5px;">
+            <div style="flex:1"><label>kWh Mese 1</label><input type="number" id="kb1" placeholder="kWh"></div>
+            <div style="flex:1"><label>kWh Mese 2</label><input type="number" id="kb2" placeholder="kWh"></div>
         </div>
     </div>
 
     <label>Numero Amici Invitati</label>
-    <input type="number" id="amiciInput" value="0">
+    <input type="number" id="amici" placeholder="0">
 
-    <button id="calc-btn" onclick="calcola()">ESEGUI CONFRONTO</button>
+    <div class="anter-box">
+        SOSTIENI L'AMBIENTE CON ANTER<br>
+        +5€ DA AGGIUNGERE SUL PRIMO MESE
+    </div>
 
-    <div class="result-card">
-        <span class="result-val" id="output">-</span><br>
-        <span style="color: #2a8a72; font-size: 14px; font-weight: 600;">Costo Mensile Stimato (IVA incl.)</span>
-        <div id="infoNota" class="pun-info">Analisi pro-rata mensile</div>
+    <div class="section old">Vecchio Fornitore</div>
+    
+    <label>QUOTA CONSUMI <br>(di cui spesa per la vendita di energia elettrica €)</label>
+    <input type="number" id="v-c" placeholder="es. 55.20">
+    
+    <label>QUOTA FISSA <br>(di cui spesa per la vendita di energia elettrica €)</label>
+    <input type="number" id="v-f" placeholder="es. 12.00">
+
+    <button class="calc-btn" onclick="calcola()">ESEGUI CONFRONTO</button>
+
+    <div class="results">
+        <div class="res-box">
+            <span class="res-label">COSTO ATTUALE</span>
+            <span class="res-val" id="out-v">€ 0.00</span>
+        </div>
+        <div class="res-box highlight">
+            <span class="res-label">NOSTRA STIMA</span>
+            <span class="res-val" id="out-n">€ 0.00</span>
+        </div>
     </div>
 </div>
 
 <script>
-    let isMensile = true;
-    let isPrimiTre = true;
+    let isM = true;
+    let isP = true;
 
-    function setType(t) {
-        isMensile = (t === 1);
-        document.getElementById('type1').classList.toggle('active', isMensile);
-        document.getElementById('type2').classList.toggle('active', !isMensile);
-        
-        // Switch visivo delle sezioni
-        document.getElementById('sectionMensile').style.display = isMensile ? 'block' : 'none';
-        document.getElementById('sectionBimestrale').style.display = isMensile ? 'none' : 'block';
+    function setTipo(v) {
+        isM = v;
+        document.getElementById('m-btn').className = v ? 'btn active' : 'btn';
+        document.getElementById('b-btn').className = v ? 'btn' : 'btn active';
+        document.getElementById('area-m').style.display = v ? 'block' : 'none';
+        document.getElementById('area-b').style.display = v ? 'none' : 'block';
     }
 
-    function setPeriod(p) {
-        isPrimiTre = (p === 1);
-        document.getElementById('period1').classList.toggle('active', isPrimiTre);
-        document.getElementById('period2').classList.toggle('active', !isPrimiTre);
+    function setFase(v) {
+        isP = v;
+        document.getElementById('p1-btn').className = v ? 'btn active' : 'btn';
+        document.getElementById('p2-btn').className = v ? 'btn' : 'btn active';
     }
 
     function calcola() {
-        let kwhMensileMedio = 0;
-        let punMedio = 0;
-        const amici = parseFloat(document.getElementById('amiciInput').value) || 0;
-
-        if (isMensile) {
-            // Logica Semplice Mensile
-            kwhMensileMedio = parseFloat(document.getElementById('kwhMese1').value) || 0;
-            punMedio = parseFloat(document.getElementById('punMese1').value) || 0;
+        let kwh = 0, pun = 0;
+        if(isM) {
+            kwh = parseFloat(document.getElementById('kwh-m').value) || 0;
+            pun = parseFloat(document.getElementById('pun-m').value);
         } else {
-            // Logica Avanzata Bimestrale
-            const kwh1 = parseFloat(document.getElementById('kwhBimes1').value) || 0;
-            const kwh2 = parseFloat(document.getElementById('kwhBimes2').value) || 0;
-            const pun1 = parseFloat(document.getElementById('punBimes1').value) || 0;
-            const pun2 = parseFloat(document.getElementById('punBimes2').value) || 0;
-
-            // Calcoliamo le medie ponderate o semplici per il confronto mensile
-            kwhMensileMedio = (kwh1 + kwh2) / 2;
-            
-            // Per il PUN, se i consumi sono molto diversi, la media ponderata è più onesta.
-            // Formula: ((kWh1*PUN1) + (kWh2*PUN2)) / TotalekWh
-            if ((kwh1 + kwh2) > 0) {
-                punMedio = ((kwh1 * pun1) + (kwh2 * pun2)) / (kwh1 + kwh2);
-            } else {
-                punMedio = (pun1 + pun2) / 2; // Default se mancano i kWh
-            }
+            let k1 = parseFloat(document.getElementById('kb1').value) || 0;
+            let k2 = parseFloat(document.getElementById('kb2').value) || 0;
+            kwh = (k1 + k2) / 2;
+            pun = (0.13266 + 0.11441) / 2;
         }
 
-        const spread = 0.0374;
-        const ccv = 11.61;
-        let totale = 0;
-
-        if (isPrimiTre) {
-            // Formula: (kWh * (PUN_MEDIO + SPREAD)) + CCV - 10€ - (10€ * AMICO)
-            totale = (kwhMensileMedio * (punMedio + spread)) + ccv - 10 - (10 * amici);
-        } else {
-            // Formula: (kWh * (PUN_MEDIO + SPREAD)) + CCV - (2€ * AMICO)
-            totale = (kwhMensileMedio * (punMedio + spread)) + ccv - (2 * amici);
-        }
-
-        const finale = totale < 0 ? 0 : totale;
-        document.getElementById('output').innerText = "€ " + finale.toFixed(2);
+        const spread = 0.0374, ccv = 11.61;
+        const nAmici = parseInt(document.getElementById('amici').value) || 0;
+        let stima = (kwh * (pun + spread)) + ccv;
         
-        let notaSottotitolo = isMensile ? "Calcolo su base mensile" : "Media bimestrale pro-rata mensile";
-        document.getElementById('infoNota').innerText = notaSottotitolo;
+        if(isP) { stima = stima - 10 - (nAmici * 10); } 
+        else { stima = stima - (nAmici * 2); }
+
+        let vC = parseFloat(document.getElementById('v-c').value) || 0;
+        let vF = parseFloat(document.getElementById('v-f').value) || 0;
+        let totV = isM ? (vC + vF) : ((vC + vF) / 2);
+
+        document.getElementById('out-n').innerText = "€ " + Math.max(0, stima).toFixed(2);
+        document.getElementById('out-v').innerText = "€ " + totV.toFixed(2);
     }
 </script>
-
 </body>
 </html>
