@@ -11,13 +11,14 @@
         h1 { color: var(--dark); text-align: center; text-transform: uppercase; font-size: 18px; margin-bottom: 20px; font-weight: 800; }
         .section { background: var(--emerald); color: white; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; margin: 15px 0; font-size: 13px; text-transform: uppercase; }
         .section.old { background: var(--red); }
-        label { display: block; font-size: 11px; font-weight: bold; margin: 12px 0 5px; color: #444; line-height: 1.2; }
+        label { display: block; font-size: 11px; font-weight: bold; margin: 12px 0 5px; color: #444; line-height: 1.3; }
         input, select { width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 10px; box-sizing: border-box; font-size: 15px; background: #fff; }
         .btn-group { display: flex; gap: 8px; }
         .btn { flex: 1; padding: 12px; border: 2px solid #e0e6ed; background: white; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: bold; color: #666; }
         .btn.active { background: var(--emerald); color: white; border-color: var(--emerald); }
-        .anter-box { background: #f0fff4; border: 1px dashed var(--dark); padding: 10px; border-radius: 10px; color: var(--dark); font-size: 11px; text-align: center; font-weight: bold; margin: 15px 0; }
-        .calc-btn { width: 100%; padding: 18px; background: var(--dark); color: white; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        .anter-box { background: #f0fff4; border: 1px dashed var(--dark); padding: 12px; border-radius: 10px; color: var(--dark); font-size: 11px; text-align: center; font-weight: bold; margin: 15px 0; }
+        .info-nota { font-size: 10px; color: #777; text-align: center; margin-bottom: 10px; font-style: italic; }
+        .calc-btn { width: 100%; padding: 18px; background: var(--dark); color: white; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; margin-top: 5px; cursor: pointer; }
         .results { display: flex; gap: 10px; margin-top: 20px; }
         .res-box { flex: 1; padding: 15px; border-radius: 15px; border: 2px solid #e0e6ed; text-align: center; background: #fff; }
         .res-box.highlight { border-color: var(--emerald); background: #f0fff4; }
@@ -52,7 +53,7 @@
             <option value="0.14340">Marzo '26 (0,14340)</option>
         </select>
         <label>Consumo kWh del Mese</label>
-        <input type="number" id="kwh-m" placeholder="es. 300">
+        <input type="number" id="kwh-m" placeholder="Inserisci kWh">
     </div>
 
     <div id="area-b" style="display:none;">
@@ -83,15 +84,17 @@
     <label>QUOTA FISSA <br>(di cui spesa per la vendita di energia elettrica €)</label>
     <input type="number" id="v-f" placeholder="es. 12.00">
 
+    <div class="info-nota">* La nostra stima include 0,016509 €/kWh di dispacciamento</div>
+
     <button class="calc-btn" onclick="calcola()">ESEGUI CONFRONTO</button>
 
     <div class="results">
         <div class="res-box">
-            <span class="res-label">COSTO ATTUALE</span>
+            <span class="res-label">COSTO ATTUALE (MESE)</span>
             <span class="res-val" id="out-v">€ 0.00</span>
         </div>
         <div class="res-box highlight">
-            <span class="res-label">NOSTRA STIMA</span>
+            <span class="res-label">NOSTRA STIMA (MESE)</span>
             <span class="res-val" id="out-n">€ 0.00</span>
         </div>
     </div>
@@ -127,9 +130,13 @@
             pun = (0.13266 + 0.11441) / 2;
         }
 
-        const spread = 0.0374, ccv = 11.61;
+        const spread = 0.0374;
+        const dispacciamento = 0.016509;
+        const ccv = 11.61;
         const nAmici = parseInt(document.getElementById('amici').value) || 0;
-        let stima = (kwh * (pun + spread)) + ccv;
+        
+        // Calcolo: (PUN + SPREAD + DISPACCIAMENTO) * kWh + CCV
+        let stima = (kwh * (pun + spread + dispacciamento)) + ccv;
         
         if(isP) { stima = stima - 10 - (nAmici * 10); } 
         else { stima = stima - (nAmici * 2); }
