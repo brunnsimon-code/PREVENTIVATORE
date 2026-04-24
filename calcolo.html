@@ -2,28 +2,29 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisi Convenienza Energetica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Analisi Energetica</title>
     <style>
         :root { --emerald: #40b093; --dark: #2a8a72; --red: #e74c3c; --bg: #f4f7f6; }
-        body { font-family: sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
-        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 420px; box-sizing: border-box; }
-        h1 { color: var(--dark); text-align: center; text-transform: uppercase; font-size: 18px; margin-bottom: 20px; font-weight: 800; }
-        .section { background: var(--emerald); color: white; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; margin: 15px 0; font-size: 13px; text-transform: uppercase; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 10px; margin: 0; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; box-sizing: border-box; }
+        h1 { color: var(--dark); text-align: center; text-transform: uppercase; font-size: 18px; margin: 0 0 15px 0; font-weight: 800; }
+        .section { background: var(--emerald); color: white; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; margin: 10px 0; font-size: 12px; text-transform: uppercase; }
         .section.old { background: var(--red); }
-        label { display: block; font-size: 11px; font-weight: bold; margin: 12px 0 5px; color: #444; line-height: 1.3; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 10px; box-sizing: border-box; font-size: 15px; background: #fff; }
-        .btn-group { display: flex; gap: 8px; }
-        .btn { flex: 1; padding: 12px; border: 2px solid #e0e6ed; background: white; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: bold; color: #666; }
-        .btn.active { background: var(--emerald); color: white; border-color: var(--emerald); }
-        .anter-box { background: #f0fff4; border: 1px dashed var(--dark); padding: 12px; border-radius: 10px; color: var(--dark); font-size: 11px; text-align: center; font-weight: bold; margin: 15px 0; }
-        .info-nota { font-size: 10px; color: #777; text-align: center; margin-bottom: 10px; font-style: italic; }
-        .calc-btn { width: 100%; padding: 18px; background: var(--dark); color: white; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; margin-top: 5px; cursor: pointer; }
-        .results { display: flex; gap: 10px; margin-top: 20px; }
-        .res-box { flex: 1; padding: 15px; border-radius: 15px; border: 2px solid #e0e6ed; text-align: center; background: #fff; }
+        label { display: block; font-size: 11px; font-weight: bold; margin: 10px 0 5px; color: #444; text-transform: uppercase; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #e0e6ed; border-radius: 10px; box-sizing: border-box; font-size: 15px; background: #fff; margin-bottom: 5px; }
+        .btn-group { display: flex; gap: 5px; margin-bottom: 10px; }
+        .btn { flex: 1; padding: 12px; border: 2px solid #e0e6ed; background: white; border-radius: 10px; cursor: pointer; font-size: 11px; font-weight: bold; color: #666; -webkit-tap-highlight-color: transparent; }
+        .btn.active { background: var(--emerald) !important; color: white !important; border-color: var(--emerald) !important; }
+        .anter-box { background: #f0fff4; border: 1px dashed var(--dark); padding: 10px; border-radius: 10px; color: var(--dark); font-size: 10px; text-align: center; font-weight: bold; margin: 10px 0; }
+        .info-nota { font-size: 10px; color: #777; text-align: center; margin: 5px 0; font-style: italic; }
+        .calc-btn { width: 100%; padding: 15px; background: var(--dark); color: white; border: none; border-radius: 15px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .results { display: flex; gap: 8px; margin-top: 15px; }
+        .res-box { flex: 1; padding: 12px; border-radius: 15px; border: 2px solid #e0e6ed; text-align: center; background: #fff; }
         .res-box.highlight { border-color: var(--emerald); background: #f0fff4; }
-        .res-label { font-size: 9px; font-weight: bold; color: #888; display: block; margin-bottom: 5px; }
-        .res-val { font-size: 18px; font-weight: 800; color: var(--dark); }
+        .res-label { font-size: 8px; font-weight: bold; color: #888; display: block; margin-bottom: 3px; }
+        .res-val { font-size: 16px; font-weight: 800; color: var(--dark); }
+        .disclaimer { font-size: 9px; color: #999; text-align: justify; margin-top: 15px; line-height: 1.2; }
     </style>
 </head>
 <body>
@@ -35,14 +36,14 @@
     
     <label>Tipo Bolletta</label>
     <div class="btn-group">
-        <button id="m-btn" class="btn active" onclick="setTipo(true)">Mensile</button>
-        <button id="b-btn" class="btn" onclick="setTipo(false)">Bimestrale</button>
+        <button type="button" id="m-btn" class="btn active" onclick="setTipo(true)">MENSILE</button>
+        <button type="button" id="b-btn" class="btn" onclick="setTipo(false)">BIMESTRALE</button>
     </div>
 
     <label>Fase Contrattuale</label>
     <div class="btn-group">
-        <button id="p1-btn" class="btn active" onclick="setFase(true)">Primi 3 Mesi</button>
-        <button id="p2-btn" class="btn" onclick="setFase(false)">Dal 4° Mese</button>
+        <button type="button" id="p1-btn" class="btn active" onclick="setFase(true)">PRIMI 3 MESI</button>
+        <button type="button" id="p2-btn" class="btn" onclick="setFase(false)">DAL 4° MESE</button>
     </div>
 
     <div id="area-m">
@@ -53,14 +54,22 @@
             <option value="0.14340">Marzo '26 (0,14340)</option>
         </select>
         <label>Consumo kWh del Mese</label>
-        <input type="number" id="kwh-m" placeholder="Inserisci kWh">
+        <input type="number" id="kwh-m" placeholder="Esempio: 250">
     </div>
 
     <div id="area-b" style="display:none;">
-        <label>PUN Mesi</label>
-        <div style="display:flex; gap:5px; margin-bottom:10px;">
-            <select id="pb1"><option value="0.13266">Gen '26</option></select>
-            <select id="pb2"><option value="0.11441" selected>Feb '26</option></select>
+        <label>PUN Mesi Selezionati</label>
+        <div style="display:flex; gap:5px;">
+            <select id="pb1">
+                <option value="0.13266">Gen '26</option>
+                <option value="0.11441">Feb '26</option>
+                <option value="0.14340">Mar '26</option>
+            </select>
+            <select id="pb2">
+                <option value="0.11441" selected>Feb '26</option>
+                <option value="0.13266">Gen '26</option>
+                <option value="0.14340">Mar '26</option>
+            </select>
         </div>
         <div style="display:flex; gap:5px;">
             <div style="flex:1"><label>kWh Mese 1</label><input type="number" id="kb1" placeholder="kWh"></div>
@@ -68,85 +77,78 @@
         </div>
     </div>
 
-    <label>Numero Amici Invitati</label>
-    <input type="number" id="amici" placeholder="0">
+    <label>N. AMICI INVITATI NELL'ANNO</label>
+    <input type="number" id="amici" value="0">
 
-    <div class="anter-box">
-        SOSTIENI L'AMBIENTE CON ANTER<br>
-        +5€ DA AGGIUNGERE SUL PRIMO MESE
-    </div>
+    <div class="anter-box">SOSTIENI L'AMBIENTE CON ANTER (+5€ I° Mese)</div>
 
     <div class="section old">Vecchio Fornitore</div>
-    
-    <label>QUOTA CONSUMI <br>(di cui spesa per la vendita di energia elettrica €)</label>
-    <input type="number" id="v-c" placeholder="es. 55.20">
-    
-    <label>QUOTA FISSA <br>(di cui spesa per la vendita di energia elettrica €)</label>
-    <input type="number" id="v-f" placeholder="es. 12.00">
+    <label>Quota Consumi (€)</label>
+    <input type="number" id="v-c" placeholder="Esempio: 55.20">
+    <label>Quota Fissa (€)</label>
+    <input type="number" id="v-f" placeholder="Esempio: 12.00">
 
     <div class="info-nota">* La nostra stima include 0,016509 €/kWh di dispacciamento</div>
 
-    <button class="calc-btn" onclick="calcola()">ESEGUI CONFRONTO</button>
+    <button type="button" class="calc-btn" onclick="calcola()">ESEGUI CONFRONTO</button>
 
     <div class="results">
         <div class="res-box">
-            <span class="res-label">COSTO ATTUALE (MESE)</span>
+            <span class="res-label">ATTUALE (MESE)</span>
             <span class="res-val" id="out-v">€ 0.00</span>
         </div>
         <div class="res-box highlight">
-            <span class="res-label">NOSTRA STIMA (MESE)</span>
+            <span class="res-label">STIMA (MESE)</span>
             <span class="res-val" id="out-n">€ 0.00</span>
         </div>
+    </div>
+
+    <div class="disclaimer">
+        * Il prezzo riportato è solo una fotografia storica e non garantisce risparmi futuri.
     </div>
 </div>
 
 <script>
-    let isM = true;
-    let isP = true;
+    let modeM = true;
+    let faseP = true;
 
-    function setTipo(v) {
-        isM = v;
-        document.getElementById('m-btn').className = v ? 'btn active' : 'btn';
-        document.getElementById('b-btn').className = v ? 'btn' : 'btn active';
-        document.getElementById('area-m').style.display = v ? 'block' : 'none';
-        document.getElementById('area-b').style.display = v ? 'none' : 'block';
+    function setTipo(val) {
+        modeM = val;
+        document.getElementById('m-btn').classList.toggle('active', val);
+        document.getElementById('b-btn').classList.toggle('active', !val);
+        document.getElementById('area-m').style.display = val ? 'block' : 'none';
+        document.getElementById('area-b').style.display = val ? 'none' : 'block';
     }
 
-    function setFase(v) {
-        isP = v;
-        document.getElementById('p1-btn').className = v ? 'btn active' : 'btn';
-        document.getElementById('p2-btn').className = v ? 'btn' : 'btn active';
+    function setFase(val) {
+        faseP = val;
+        document.getElementById('p1-btn').classList.toggle('active', val);
+        document.getElementById('p2-btn').classList.toggle('active', !val);
     }
 
     function calcola() {
-        let kwh = 0, pun = 0;
-        if(isM) {
-            kwh = parseFloat(document.getElementById('kwh-m').value) || 0;
-            pun = parseFloat(document.getElementById('pun-m').value);
+        let k, p;
+        if(modeM) {
+            k = parseFloat(document.getElementById('kwh-m').value) || 0;
+            p = parseFloat(document.getElementById('pun-m').value) || 0;
         } else {
-            let k1 = parseFloat(document.getElementById('kb1').value) || 0;
-            let k2 = parseFloat(document.getElementById('kb2').value) || 0;
-            kwh = (k1 + k2) / 2;
-            pun = (0.13266 + 0.11441) / 2;
+            k = ((parseFloat(document.getElementById('kb1').value) || 0) + (parseFloat(document.getElementById('kb2').value) || 0)) / 2;
+            p = (parseFloat(document.getElementById('pb1').value) + parseFloat(document.getElementById('pb2').value)) / 2;
         }
 
-        const spread = 0.0374;
-        const dispacciamento = 0.016509;
-        const ccv = 11.61;
-        const nAmici = parseInt(document.getElementById('amici').value) || 0;
+        const spr = 0.0374, dis = 0.016509, ccv = 11.61;
+        const nA = parseInt(document.getElementById('amici').value) || 0;
         
-        // Calcolo: (PUN + SPREAD + DISPACCIAMENTO) * kWh + CCV
-        let stima = (kwh * (pun + spread + dispacciamento)) + ccv;
-        
-        if(isP) { stima = stima - 10 - (nAmici * 10); } 
-        else { stima = stima - (nAmici * 2); }
+        let res = (k * (p + spr + dis)) + ccv;
+        if(faseP) { res = res - 10 - (nA * 10); } 
+        else { res = res - (nA * 2); }
 
         let vC = parseFloat(document.getElementById('v-c').value) || 0;
         let vF = parseFloat(document.getElementById('v-f').value) || 0;
-        let totV = isM ? (vC + vF) : ((vC + vF) / 2);
+        let vT = modeM ? (vC + vF) : ((vC + vF) / 2);
 
-        document.getElementById('out-n').innerText = "€ " + Math.max(0, stima).toFixed(2);
-        document.getElementById('out-v').innerText = "€ " + totV.toFixed(2);
+        document.getElementById('out-n').innerText = "€ " + Math.max(0, res).toFixed(2);
+        document.getElementById('out-v').innerText = "€ " + vT.toFixed(2);
     }
 </script>
 </body>
